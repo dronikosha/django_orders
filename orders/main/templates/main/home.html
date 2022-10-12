@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+<body class="container">
+    <h1 style="text-align: center">Home</h1>
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}!</p>
+        <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <a href="{% url "registration" %}">Registration</a>
+        <a> | </a>
+        <a href="{% url "login" %}">Login</a>
+    {% endif %}
+
+    <h2>Orders
+        <a href="{% url 'create' %}" style="right: 0"><button type="button" class="btn btn-primary">Create order</button></a>
+    </h2>
+    {% for order in orders %}
+    <div style="margin-top: 10px">
+        <div class="card">
+            <div class="card-body" style="padding-bottom: 10px; padding-top: 10px">
+                <p style="font-size: 14px">Author: {{ order.owner.username }}</p>
+                <h5 class="card-title" style="font-size: 27px">{{ order.title }}</h5>
+                <p class="card-text">{{ order.text|truncatechars:300 }}
+                    {% if order.text|length > 300 %}
+                        <a href="{% url 'order' order.id %}">  Read more</a>
+                    {% endif %}
+                    
+                </p>
+                <em style="font-size: 12px">Created at: {{ order.created }}
+                    {% if order.owner == user %}
+                        <a href="{% url 'update' order.id %}" style="right: 0"><button type="button" class="btn btn-primary">Update</button></a>
+                        <a href="{% url 'delete' order.id %}" style="right: 0"><button type="button" class="btn btn-danger">Delete</button></a>
+                    {% endif %}
+                </em>
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
