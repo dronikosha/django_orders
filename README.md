@@ -6,3 +6,4 @@ This is a small project written with Django. Functionality includes:
 4) Ability to view orders in detail
 5) Search capability
 6) Pagination
+7) Added .env file
