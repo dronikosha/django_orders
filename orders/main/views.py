@@ -5,6 +5,17 @@ from django.core.paginator import Paginator
 from .models import Order
 
 
+
+def owner_check(func):
+    def wrapper(request, order_id):
+        order = Order.objects.get(pk=order_id)
+        if order.owner == request.user:
+            return func(request, order_id)
+        else:
+            return redirect('home')
+    return wrapper
+
+
 def home(request):
     orders = Order.objects.all().reverse()
     paginator = Paginator(orders, 4)
@@ -50,6 +61,7 @@ def order(request, order_id):
     return render(request, 'main/order.html', {'order': order})
 
 
+@owner_check
 @login_required
 def delete(request, order_id):
     order = Order.objects.get(pk=order_id)
@@ -57,6 +69,7 @@ def delete(request, order_id):
     return redirect('home')
 
 
+@owner_check
 @login_required
 def update(request, order_id):
     order = Order.objects.get(pk=order_id)
