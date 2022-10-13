@@ -5,3 +5,4 @@ This is a small project written with Django. Functionality includes:
 3) Convenient editing and deleting an order depending on access rights
 4) Ability to view orders in detail
 5) Search capability
+6) Pagination

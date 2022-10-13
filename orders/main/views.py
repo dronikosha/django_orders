@@ -1,12 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.core.paginator import Paginator
 
 from .models import Order
 
 
 def home(request):
     orders = Order.objects.all().reverse()
-    return render(request, 'main/home.html', {'orders': orders})
+    paginator = Paginator(orders, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'main/home.html', {'page_obj': page_obj})
 
 
 def search(request):
