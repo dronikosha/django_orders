@@ -50,12 +50,14 @@ def order(request, order_id):
     return render(request, 'main/order.html', {'order': order})
 
 
+@login_required
 def delete(request, order_id):
     order = Order.objects.get(pk=order_id)
     order.delete()
     return redirect('home')
 
 
+@login_required
 def update(request, order_id):
     order = Order.objects.get(pk=order_id)
     if request.method == 'POST':
