@@ -7,3 +7,4 @@ This is a small project written with Django. Functionality includes:
 5) Search capability
 6) Pagination
 7) Added .env file
+8) API
