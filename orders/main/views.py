@@ -6,10 +6,7 @@ from .models import Order
 
 def home(request):
     orders = Order.objects.all().reverse()
-    if request.method == 'GET':
-        return render(request, 'main/home.html', {'orders': orders})
-    else:
-        return render(request, 'main/home.html', {'orders': orders})
+    return render(request, 'main/home.html', {'orders': orders})
 
 
 @login_required
