@@ -19,6 +19,16 @@
     <h2>Orders
         <a href="{% url 'create' %}" style="right: 0"><button type="button" class="btn btn-primary">Create order</button></a>
     </h2>
+    <form action="{% url 'search' %}" method="get">
+        <div class="form-group">
+            <label for="search">Search</label>
+            <input type="text" class="form-control" id="search" name="search" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href="{% url 'home' %}">
+            <button type="button" class="btn btn-primary">Reset</button>
+        </a>
+    </form>
     {% for order in orders %}
     <div style="margin-top: 10px">
         <div class="card">

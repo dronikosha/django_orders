@@ -9,6 +9,15 @@ def home(request):
     return render(request, 'main/home.html', {'orders': orders})
 
 
+def search(request):
+    if request.method == 'GET':
+        search = request.GET['search']
+        orders = Order.objects.filter(title__contains=search) | Order.objects.filter(text__contains=search)
+        return render(request, 'main/home.html', {'orders': orders.reverse()})
+    else:
+        return render(request, 'main/home.html')
+
+
 @login_required
 def create(request):
     if request.method == 'POST':
