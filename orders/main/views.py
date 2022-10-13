@@ -15,11 +15,18 @@ def home(request):
 
 def search(request):
     if request.method == 'GET':
-        search = request.GET['search']
-        orders = Order.objects.filter(title__contains=search) | Order.objects.filter(text__contains=search)
-        return render(request, 'main/home.html', {'orders': orders.reverse()})
+        if request.GET['search'] and request.GET['search'] != '':
+            search = request.GET['search']
+            orders = (Order.objects.filter(title__contains=search) |
+                      Order.objects.filter(text__contains=search)).reverse()
+            paginator = Paginator(orders, 4)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            return render(request, 'main/home.html', {'search': search, 'page_obj': page_obj})
+        else:
+            return redirect('home')
     else:
-        return render(request, 'main/home.html')
+        return redirect('home')
 
 
 @login_required

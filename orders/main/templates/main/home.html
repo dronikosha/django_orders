@@ -22,7 +22,11 @@
     <form action="{% url 'search' %}" method="get">
         <div class="form-group">
             <label for="search">Search</label>
-            <input type="text" class="form-control" id="search" name="search" placeholder="Search">
+            {% if search is None %}
+                <input type="text" class="form-control" id="search" name="search" placeholder="Search">
+            {% else %}
+                <input type="text" class="form-control" id="search" name="search" placeholder="Search" value="{{ search }}">
+            {% endif %}
         </div>
         <button type="submit" class="btn btn-primary">Search</button>
         <a href="{% url 'home' %}">
@@ -55,17 +59,33 @@
     <div style="margin-top: 10px; display: flex; justify-content: center;">
             <ul class="pagination">
                 {% if page_obj.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% if search is None %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search }}">Previous</a></li>
+                    {% endif %}
                 {% endif %}
                 {% for i in page_obj.paginator.page_range %}
                     {% if page_obj.number == i %}
+                        {% if search is None %}
                         <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% else %}
+                        <li class="page-item active"><a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a></li>
+                        {% endif %}
                     {% else %}
+                        {% if search is None %}
                         <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a></li>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
                 {% if page_obj.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    {% if search is None %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search }}">Next</a></li>
+                    {% endif %}
                 {% endif %}
             </ul>
     </div>
