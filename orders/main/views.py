@@ -60,16 +60,16 @@ def order(request, order_id):
     return render(request, 'main/order.html', {'order': order})
 
 
-@owner_check
 @login_required
+@owner_check
 def delete(request, order_id):
     order = Order.objects.get(pk=order_id)
     order.delete()
     return redirect('home')
 
 
-@owner_check
 @login_required
+@owner_check
 def update(request, order_id):
     order = Order.objects.get(pk=order_id)
     if request.method == 'POST':
