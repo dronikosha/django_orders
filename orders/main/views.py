@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
+from django.contrib.auth.models import User
 
 from .models import Order
 
@@ -83,3 +84,13 @@ def update(request, order_id):
             return render(request, 'main/update.html', {'order': order, 'error': 'All fields are required.'})
     else:
         return render(request, 'main/update.html', {'order': order})
+    
+
+@login_required
+def profile(request, username):
+    user = User.objects.get(username=username)
+    orders = Order.objects.select_related('owner').filter(owner=user).reverse()
+    paginator = Paginator(orders, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'main/profile.html', {'user': user, 'page_obj': page_obj})
