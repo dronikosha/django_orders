@@ -16,6 +16,16 @@ def owner_check(func):
     return wrapper
 
 
+def check_exists(func):
+    def wrapper(request, order_id):
+        try:
+            Order.objects.get(pk=order_id)
+        except Order.DoesNotExist:
+            return redirect('home')
+        return func(request, order_id)
+    return wrapper
+
+
 def home(request):
     orders = Order.objects.all().reverse()
     paginator = Paginator(orders, 4)
@@ -61,6 +71,7 @@ def order(request, order_id):
     return render(request, 'main/order.html', {'order': order})
 
 
+@check_exists
 @login_required
 @owner_check
 def delete(request, order_id):
@@ -69,6 +80,7 @@ def delete(request, order_id):
     return redirect('home')
 
 
+@check_exists
 @login_required
 @owner_check
 def update(request, order_id):
@@ -84,12 +96,13 @@ def update(request, order_id):
             return render(request, 'main/update.html', {'order': order, 'error': 'All fields are required.'})
     else:
         return render(request, 'main/update.html', {'order': order})
-    
+
 
 @login_required
 def profile(request, username):
     profile_user = User.objects.get(username=username)
-    orders = Order.objects.select_related('owner').filter(owner=profile_user).reverse()
+    orders = Order.objects.select_related(
+        'owner').filter(owner=profile_user).reverse()
     paginator = Paginator(orders, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
