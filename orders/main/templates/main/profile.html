@@ -16,7 +16,7 @@
         <a> | </a>
         <a href="{% url "login" %}">Login</a>
     {% endif %}
-    <h3 style="text-align: center">{{ user.username }}'s profile</h3>
+    <h3 style="text-align: center">{{ profile_user.username }}'s profile</h3>
     <hr>
     {% for order in page_obj %}
     <div style="margin-top: 10px">

@@ -88,9 +88,9 @@ def update(request, order_id):
 
 @login_required
 def profile(request, username):
-    user = User.objects.get(username=username)
-    orders = Order.objects.select_related('owner').filter(owner=user).reverse()
+    profile_user = User.objects.get(username=username)
+    orders = Order.objects.select_related('owner').filter(owner=profile_user).reverse()
     paginator = Paginator(orders, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'main/profile.html', {'user': user, 'page_obj': page_obj})
+    return render(request, 'main/profile.html', {'profile_user': profile_user, 'page_obj': page_obj})
