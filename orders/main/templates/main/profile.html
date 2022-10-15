@@ -16,7 +16,18 @@
         <a> | </a>
         <a href="{% url "login" %}">Login</a>
     {% endif %}
-    <h3 style="text-align: center">{{ profile_user.username }}'s profile</h3>
+    <h3 style="text-align: center">
+        {% if profile_user == user %}
+            <form action="" method="get">
+                <button type="submit" class="btn btn-primary" name='token' value='token'>Get Token</button>
+                {% if token %}
+                    <input type="" name="get_token" value="{{ token|first }}" disabled size="42" style="font-size: 16px"></input>
+                {% endif %}
+            </form>
+        {% else %}
+            {{ profile_user.username }}'s profile
+        {% endif %}
+    </h3>
     <hr>
     {% for order in page_obj %}
     <div style="margin-top: 10px">

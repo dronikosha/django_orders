@@ -7,5 +7,5 @@ This is a small project written with Django. Functionality includes:
 5) Search capability
 6) Pagination
 7) Added .env file
-8) API
+8) API + Token Auth
 9) Profiles are made and orders are displayed in them using select_related

@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 from .models import Order
 
@@ -106,4 +107,9 @@ def profile(request, username):
     paginator = Paginator(orders, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'main/profile.html', {'profile_user': profile_user, 'page_obj': page_obj})
+    if request.method == 'GET' and request.GET.get('token'):
+        token = Token.objects.get_or_create(user=request.user)
+        print(token)
+        return render(request, 'main/profile.html', {'profile_user': profile_user, 'page_obj': page_obj, 'token': token})
+    else:
+        return render(request, 'main/profile.html', {'profile_user': profile_user, 'page_obj': page_obj})
